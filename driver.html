@@ -98,9 +98,9 @@
         }
        
         .section-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
         }
        
         .bus-list {
@@ -109,7 +109,7 @@
             overflow-y: auto; /* Add scrolling to the bus list */
             margin-bottom: 20px;
             flex: 1; /* Make the bus list take remaining space */
-            max-height: calc(100vh - 400px); /* Adjust this value based on your needs */
+            max-height: 50vh; /* Set to 50% of viewport height */
         }
 
 
@@ -281,27 +281,28 @@
             display: flex;
             background: var(--darker-bg);
             border-radius: var(--border-radius);
-            margin-bottom: 20px; /* Increased from 16px for better spacing */
+            margin-bottom: 8px;
             overflow: hidden;
-            min-height: 56px; /* Added to match button height */
+            min-height: 48px;
+            transition: opacity 0.3s, height 0.3s;
         }
        
         .direction-btn {
             flex: 1;
-            padding: 16px; /* Increased from 12px */
+            padding: 12px;
             text-align: center;
             background: transparent;
             border: none;
             color: var(--secondary-text);
-            font-size: 16px; /* Increased from 14px */
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 56px; /* Added explicit height */
-            text-transform: uppercase; /* Optional: makes the text all caps for better visibility */
+            height: 48px;
+            text-transform: uppercase;
         }
        
         .direction-btn.active {
@@ -321,10 +322,10 @@
 
 
         .bus-number-container {
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 12px;
+            padding: 8px;
         }
 
 
@@ -333,7 +334,7 @@
             background: var(--darker-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            padding: 12px;
+            padding: 8px;
             color: var(--text-color);
             font-size: 16px;
             outline: none;
@@ -359,16 +360,16 @@
         .location-selectors {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
 
         .location-select-container {
-            margin-bottom: 0; /* Remove individual margin since we're using gap */
+            margin-bottom: 0;
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 12px;
+            padding: 8px;
             position: relative;
         }
 
@@ -378,7 +379,7 @@
             background: var(--darker-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            padding: 12px;
+            padding: 8px;
             color: var (--text-color);
             font-size: 16px;
             outline: none;
@@ -386,7 +387,7 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            color: var(--text-color); /* Ensures the selected text is white */
+            color: var(--text-color);
         }
 
 
@@ -399,7 +400,7 @@
             background: var(--darker-bg);
             color: var (--text-color);
             padding: 12px;
-            color: var(--text-color); /* Makes option text white */
+            color: var(--text-color);
         }
 
 
@@ -436,27 +437,55 @@
 
         /* Add this to style the placeholder text */
         .location-select option[disabled] {
-            color: var(--text-color); /* Makes placeholder text white */
+            color: var(--text-color);
         }
 
         .timer-container {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 12px;
-            margin-bottom: 16px;
+            padding: 8px;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .current-time {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--accent-blue);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .countdown {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--secondary-text);
+        }
+
+        .trip-info {
+            display: none; /* Hidden by default */
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .trip-info-item {
+            margin-bottom: 8px;
+            color: var(--secondary-text);
+        }
+
+        .trip-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .trip-info-label {
+            font-size: 12px;
+            display: block;
+        }
+
+        .trip-info-value {
+            font-size: 16px;
+            color: var(--text-color);
+            font-weight: 600;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
@@ -942,6 +971,41 @@
                         this.textContent = 'End Trip';
                         this.style.backgroundColor = '#d32f2f';
 
+                        // Hide the input controls
+                        document.querySelector('.direction-selector').style.display = 'none';
+                        document.querySelector('.bus-number-container').style.display = 'none';
+                        document.querySelector('.location-selectors').style.display = 'none';
+                        document.querySelector('.section-title').style.display = 'none';
+                        document.querySelector('.bus-list').style.display = 'none';
+
+                        // Show trip info
+                        let tripInfo = document.createElement('div');
+                        tripInfo.className = 'trip-info';
+                        tripInfo.id = 'tripInfo';
+
+                        // Get the selected route details
+                        const selectedRoute = document.querySelector('.bus-item[data-id="' + selectedRouteId + '"]');
+                        const routeText = selectedRoute.querySelector('.route-number').textContent;
+
+                        tripInfo.innerHTML = `
+                            <div class="trip-info-item">
+                                <span class="trip-info-label">Route</span>
+                                <span class="trip-info-value">${routeText}</span>
+                            </div>
+                            <div class="trip-info-item">
+                                <span class="trip-info-label">Direction</span>
+                                <span class="trip-info-value">${currentDirection}</span>
+                            </div>
+                            <div class="trip-info-item">
+                                <span class="trip-info-label">Bus Number</span>
+                                <span class="trip-info-value">${busNumberInput.value.trim()}</span>
+                            </div>
+                        `;
+
+                        // Insert trip info after timer
+                        document.querySelector('.timer-container').insertAdjacentElement('afterend', tripInfo);
+                        tripInfo.style.display = 'block';
+
                         // Start location tracking after successful trip creation
                         startLocationTracking();
 
@@ -1009,6 +1073,19 @@
                     console.log('[Driver] State reset complete, refreshing route list');
                     // Refresh the route list
                     generateBusData();
+
+                    // Show the input controls
+                    document.querySelector('.direction-selector').style.display = 'flex';
+                    document.querySelector('.bus-number-container').style.display = 'block';
+                    document.querySelector('.location-selectors').style.display = 'flex';
+                    document.querySelector('.section-title').style.display = 'block';
+                    document.querySelector('.bus-list').style.display = 'block';
+
+                    // Remove trip info
+                    const tripInfo = document.getElementById('tripInfo');
+                    if (tripInfo) {
+                        tripInfo.remove();
+                    }
                 }
             });
 
