@@ -1,5 +1,5 @@
 // service-worker.js - Enhanced for background operation
-const CACHE_NAME = 'driver-cache-v1';
+const CACHE_NAME = 'driver-cache-v4';
 const urlsToCache = [
   './',
   './driver.html',
