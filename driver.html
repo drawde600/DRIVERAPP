@@ -558,11 +558,8 @@
 
     <script>
         // Initialize Supabase client
-        //const supabaseUrl = 'https://jeszxshbzmnxdoqjltuk.supabase.co'
-        //const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Implc3p4c2hiem1ueGRvcWpsdHVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4MzM0NjIsImV4cCI6MjA1NjQwOTQ2Mn0.FgZmXxDX00_9OLyLgFM_dyrPpb1eISeIte9s1edLPcE'
         const supabaseUrl = 'https://bguwiprkgcxrqauztmvd.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJndXdpcHJrZ2N4cnFhdXp0bXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA3ODAxOTksImV4cCI6MjA1NjM1NjE5OX0.ATbtMPiPt8VvtyVBu-gpmDo8Mo1eWy1aFXKfb6m1QsE';
-
 
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
 
@@ -574,6 +571,7 @@
 
         // Modify the fetchRoutes function to filter by direction
         async function fetchRoutes(direction) {
+            console.log('[Driver] Fetching routes for direction:', direction);
             try {
                 console.log('[Driver] Starting fetchRoutes with direction:', direction);
                 
@@ -639,6 +637,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
+            console.log('[Driver] DOMContentLoaded event triggered');
             // DOM elements
             const busList = document.getElementById('busList');
             const emptyState = document.getElementById('emptyState');
@@ -660,6 +659,7 @@
            
             // Function to generate random bus data based on the current direction
             async function generateBusData() {
+                console.log('[Driver] Generating bus data');
                 try {
                     loadingIndicator.style.display = 'flex';
                     
@@ -687,6 +687,7 @@
            
             // Add this sorting function before filtering routes
             function sortRoutes(routes) {
+                console.log('[Driver] Sorting routes');
                 return routes.sort((a, b) => {
                     // First sort by origin
                     const originCompare = a.origin.localeCompare(b.origin);
@@ -707,6 +708,7 @@
 
             // Modify the filterRoutes function
             async function filterRoutes() {
+                console.log('[Driver] Filtering routes');
                 try {
                     const selectedOrigin = originSelect.value;
                     const selectedDestination = destinationSelect.value;
@@ -809,6 +811,7 @@
            
             // Function to show bus details
             function showBusDetails(busId) {
+                console.log('[Driver] Showing bus details for:', busId);
                 if (busNumberInput.value.trim() === '') {
                     alert('[Driver] Please enter a bus number');
                     busNumberInput.focus();
@@ -841,6 +844,7 @@
            
             // Direction buttons
             southboundBtn.addEventListener('click', function() {
+                console.log('[Driver] Southbound button clicked');
                 if (currentDirection !== 'Southbound') { // Change to match exact database value
                     console.log('[Driver] Switching to Southbound direction');
                     currentDirection = 'Southbound'; // Match exact database value
@@ -853,6 +857,7 @@
             });
            
             northboundBtn.addEventListener('click', function() {
+                console.log('[Driver] Northbound button clicked');
                 if (currentDirection !== 'Northbound') { // Change to match exact database value
                     console.log('[Driver] Switching to Northbound direction');
                     currentDirection = 'Northbound'; // Match exact database value
@@ -866,6 +871,7 @@
            
             // View Map button
             mapBtn.addEventListener('click', async function() {
+                console.log('[Driver] View Map button clicked');
                 if (!selectedRouteId || !busNumberInput.value.trim()) {
                     alert('[Driver] Please select a route and enter a bus number');
                     return;
@@ -1009,6 +1015,7 @@
 
             // Add validation for required field
             busNumberInput.addEventListener('input', function() {
+                console.log('[Driver] Bus number input changed:', this.value);
                 if (this.value.trim() === '') {
                     this.style.borderColor = 'var(--button-color)';
                 } else {
@@ -1041,6 +1048,7 @@
 
             // Test Supabase connection
             async function testSupabaseConnection() {
+                console.log('[Driver] Testing Supabase connection...');
                 try {
                     console.log('[Driver] Testing Supabase connection...');
                     const { data, error } = await supabase
@@ -1073,6 +1081,7 @@
 
         // Add loading indicators to the select elements
         async function updateOriginOptions() {
+            console.log('[Driver] Updating origin options');
             try {
                 // Add loading class
                 originSelect.classList.add('loading');
@@ -1113,6 +1122,7 @@
 
 
         async function updateDestinationOptions() {
+            console.log('[Driver] Updating destination options');
             try {
                 // Add loading class
                 destinationSelect.classList.add('loading');
@@ -1150,6 +1160,7 @@
 
         // Add these new functions for location tracking
         function startLocationTracking() {
+            console.log('[Driver] Starting location tracking');
             if (!navigator.geolocation) {
                 console.error('[Driver] Geolocation is not supported by this browser');
                 alert('[Driver] Geolocation is not supported by this browser');
@@ -1173,6 +1184,7 @@
         }
 
         function stopLocationTracking() {
+            console.log('[Driver] Stopping location tracking');
             if (locationUpdateInterval) {
                 clearInterval(locationUpdateInterval);
                 locationUpdateInterval = null;
@@ -1182,6 +1194,7 @@
         }
 
         async function updateLocation() {
+            console.log('[Driver] Updating location');
             if (!currentTripId) return;
 
             try {
@@ -1234,6 +1247,7 @@
         }
 
         function getCurrentPosition() {
+            console.log('[Driver] Getting current position');
             return new Promise((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(resolve, reject, {
                     enableHighAccuracy: true,
@@ -1245,18 +1259,13 @@
 
         // Add these new functions for the clock and countdown
         function updateClock() {
+            console.log('[Driver] Updating clock');
             const now = new Date();
             // Format UTC time as HH:mm:ss
             const hours = String(now.getUTCHours()).padStart(2, '0');
             const minutes = String(now.getUTCMinutes()).padStart(2, '0');
             const seconds = String(now.getUTCSeconds()).padStart(2, '0');
             const timeStr = `${hours}:${minutes}:${seconds} UTC`;
-            
-            // Add logging for clock updates
-            //console.log('[Driver] Updating clock:', {
-            //    currentUTC: timeStr,
-            //    rawDate: now.toISOString()
-            //});
             
             document.getElementById('currentTime').textContent = timeStr;
         }
@@ -1266,6 +1275,7 @@
         const UPDATE_INTERVAL = 60; // seconds
 
         function startCountdown() {
+            console.log('[Driver] Starting countdown');
             let secondsLeft = UPDATE_INTERVAL;
             updateCountdown(secondsLeft);
             
@@ -1280,10 +1290,12 @@
         }
 
         function updateCountdown(seconds) {
+            console.log('[Driver] Updating countdown');
             document.getElementById('countdown').textContent = `Next update in: ${seconds}s`;
         }
 
         function stopCountdown() {
+            console.log('[Driver] Stopping countdown');
             if (countdownInterval) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
@@ -1293,6 +1305,7 @@
 
         // Add this new function to properly request location permission
         async function requestLocationPermission() {
+            console.log('[Driver] Requesting location permission');
             try {
                 const result = await navigator.permissions.query({ name: 'geolocation' });
                 if (result.state === 'granted') {
