@@ -1,0 +1,22 @@
+given supabase 
+CREATE TABLE stops (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  longitude numeric,
+  latitude numeric
+);
+
+CREATE TABLE waypoint (
+  id SERIAL PRIMARY KEY,
+  northboundnext INTEGER,
+  southboundnext INTEGER,
+  waypointname TEXT NOT NULL,
+  longitude numeric NOT NULL,
+  latitude numeric NOT NULL
+);
+
+how to check if stops.name is in waypoint.waypointname
+
+
+
+
