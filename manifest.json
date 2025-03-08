@@ -1,7 +1,7 @@
 {
-  "name": "GPS Location Tracker",
-  "short_name": "LocationTracker",
-  "start_url": "/index.html",
+  "name": "Project Para",
+  "short_name": "Para",
+  "start_url": "/driver.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#317EFB",
